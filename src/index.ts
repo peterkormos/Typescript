@@ -1,7 +1,7 @@
-import { Book } from "./Book";
-import { ILibrary } from "./ILibrary";
-import { Library } from "./Library";
-import { User } from "./User";  
+import { Book } from "./models/Book";
+import { ILibrary } from "./models/ILibrary";
+import { Library } from "./models/Library";
+import { User } from "./models/User";  
 
 const bookId = "bookId1";
 
