@@ -1,8 +1,7 @@
+import { ILibrary } from './ILibrary';
+
 export class User {
-    constructor(_userId, _name, _email) {
-        this._userId = _userId;
-        this._name = _name;
-        this._email = _email;
+    constructor(private _userId: string, private _name: string, private _email: string) {
     }
     get id() {
         return this._userId;
@@ -13,7 +12,7 @@ export class User {
     get email() {
         return this._email;
     }
-    borrowBook(library, bookId) {
+    borrowBook(library: ILibrary, bookId: string) {
         const book = library.findBookById(bookId);
         if (book) {
             library.removeBook(bookId);

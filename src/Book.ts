@@ -1,10 +1,7 @@
 export class Book {
-    constructor(_userId, _title, _author, _price) {
-        this._userId = _userId;
-        this._title = _title;
-        this._author = _author;
-        this._price = _price;
+    constructor(private _userId: string, private _title: string, private _author: string, private _price: number) {
     }
+
     get id() {
         return this._userId;
     }

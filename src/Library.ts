@@ -1,17 +1,21 @@
-export class Library {
+import { Book } from './Book';
+import { ILibrary } from './ILibrary';
+
+export class Library implements ILibrary {
+    books: Book[];
     constructor() {
         this.books = [];
     }
-    addBook(book) {
+    addBook(book: Book) : void {
         this.books.push(book);
     }
-    removeBook(id) {
+    removeBook(id: string) : void {
         this.books = this.books.filter(book => book.id !== id);
     }
-    findBookById(id) {
+    findBookById(id: string) : Book | undefined {
         return this.books.find(book => book.id === id);
     }
-    listAllBooks() {
+    listAllBooks() : Book[] {
         return this.books;
     }
 }
