@@ -4,10 +4,23 @@ import IEvent from "../models/IEvent";
 import IUser from "../models/IUser";
 import IEventService from "./IEventService";
 
+
+function Log(target: any, propertyKey: string,
+  descriptor: PropertyDescriptor) {
+    const originalMethod = descriptor.value;
+
+    descriptor.value = function (...args: any[]) {
+        console.log(`----- ${propertyKey} hívása`);
+        const result = originalMethod.apply(this, args);
+        return result;
+    };
+}
+
 export class EventService implements IEventService {
     private readonly eventFactory = EventFactory.getInstance();
     private readonly events: Map<EntityId, IEvent> = new Map();
 
+    @Log
     createEvent(type: EventType, name: string, place: string, time: Date = new Date(), participants: IUser[] = []): IEvent {
         const event = this.eventFactory.createEvent(getNewEntityId(), name, place, time, participants, type);
         this.events.set(event.getId(), event);
@@ -25,6 +38,7 @@ export class EventService implements IEventService {
         return event;
     }
 
+    @Log
     updateEvent(eventId: EntityId, type: EventType, name: string, place: string): IEvent {
         const event = this.getMandatoryEvent(eventId);
 
@@ -35,6 +49,7 @@ export class EventService implements IEventService {
         return event;
     }
 
+    @Log
     deleteEvent(eventId: EntityId): IEvent {
         const event = this.getMandatoryEvent(eventId);
         
@@ -43,6 +58,7 @@ export class EventService implements IEventService {
         return event;
     }
 
+    @Log
     getEvents(type?: EventType): IEvent[] {
         const returned = Array.from(this.events.values());
 
@@ -52,12 +68,14 @@ export class EventService implements IEventService {
         return returned.filter(event => event.getType() === type);
     }
 
+    @Log
     getParticipants(eventId: EntityId): IUser[] {
         const event = this.getMandatoryEvent(eventId);
 
         return event.getParticipants();
     }
     
+    @Log
     addParticipant(eventId: EntityId, user: IUser): IEvent {
         const event = this.getMandatoryEvent(eventId);
 
@@ -65,6 +83,7 @@ export class EventService implements IEventService {
         return event;
     }
     
+    @Log
     removeParticipant(eventId: EntityId, userId: EntityId): IEvent {
         const event = this.getMandatoryEvent(eventId);
 
@@ -74,6 +93,7 @@ export class EventService implements IEventService {
         return event;
     }
     
+    @Log
     getEventsByType(): Map<EventType, IEvent[]> {
         const eventsByType = new Map<EventType, IEvent[]>();
 
