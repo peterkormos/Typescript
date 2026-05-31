@@ -1,0 +1,1 @@
+https://github.com/Pezsi/Vizsga/issues/1
