@@ -2,8 +2,8 @@
   // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
     // File Layout
-     "rootDir": "./src",
-     "outDir": "./dist",
+    "rootDir": "./src",
+    "outDir": "./dist",
 
      // Decorator Options
     "experimentalDecorators": true,
@@ -11,17 +11,12 @@
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
     "module": "nodenext",
-//    "target": "esnext",
-// "module": "es2015",
-        "target": "es2016",
-        "jsx": "react",
+    "target": "esnext",
     "types": [],
     // For nodejs:
     // "lib": ["esnext"],
     // "types": ["node"],
     // and npm install -D @types/node
-
-    "noImplicitAny": true,
 
     // Other Outputs
     "sourceMap": true,
@@ -42,14 +37,11 @@
 
     // Recommended Options
     "strict": true,
-//    "jsx": "react-jsx",
-//    "verbatimModuleSyntax": true,
+    "jsx": "react-jsx",
+    "verbatimModuleSyntax": false,
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
-  },
-    "include": [
-        "./src/**/*"
-    ]
+  }
 }
