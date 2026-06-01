@@ -28,34 +28,37 @@ export class EventService implements IEventService {
         return event;
     }
 
-    private getMandatoryEvent(id: EntityId): IEvent {
+    private getMandatoryEvent(id: EntityId): Promise<IEvent> {
         const event = this.events.get(id);
         
         if (!event) {
-            throw new Error("Event not found.");
+            return Promise.reject(new Error(`Nincs ilyen id-val esemény: ${id}`));
         }
 
-        return event;
+        return Promise.resolve(event);
     }
 
     @Log
-    updateEvent(eventId: EntityId, type: EventType, name: string, place: string): IEvent {
+    updateEvent(eventId: EntityId, type: EventType, name: string, place: string): Promise<IEvent> {
         const event = this.getMandatoryEvent(eventId);
 
-        event.setType(type);
-        event.setName(name);
-        event.setPlace(place);
+        return event.then(event => {
+            event.setType(type);
+            event.setName(name);
+            event.setPlace(place);
 
-        return event;
+            return event;
+        });
     }
 
     @Log
-    deleteEvent(eventId: EntityId): IEvent {
+    deleteEvent(eventId: EntityId): Promise<IEvent> {
         const event = this.getMandatoryEvent(eventId);
-        
-        this.events.delete(eventId);
-        
-        return event;
+ 
+        return event.then(event => {
+            this.events.delete(eventId);
+            return event;
+        });
     }
 
     @Log
@@ -69,39 +72,43 @@ export class EventService implements IEventService {
     }
 
     @Log
-    getParticipants(eventId: EntityId): IUser[] {
+    getParticipants(eventId: EntityId): Promise<IUser[]> {
         const event = this.getMandatoryEvent(eventId);
 
-        return event.getParticipants();
+        return event.then(event => event.getParticipants());
     }
     
     @Log
-    addParticipant(eventId: EntityId, user: IUser): IEvent {
+    addParticipant(eventId: EntityId, user: IUser): Promise<IEvent> {
         const event = this.getMandatoryEvent(eventId);
+        
+        event.then(event => {
+            event.addParticipant(user);
+        });
 
-        event.addParticipant(user);
         return event;
     }
     
     @Log
-    removeParticipant(eventId: EntityId, userId: EntityId): IEvent {
+    removeParticipant(eventId: EntityId, userId: EntityId): Promise<IEvent> {
         const event = this.getMandatoryEvent(eventId);
 
+        event.then(event => {
         event.setParticipants(
         event.getParticipants().filter(participant => participant.getId() !== userId));
+        });
 
         return event;
     }
     
     @Log
-    getEventsByType(): Map<EventType, IEvent[]> {
+    getEventsByType(): Promise<Map<EventType, IEvent[]>> {
         const eventsByType = new Map<EventType, IEvent[]>();
 
         this.events.forEach(
-            (event, eventId) => {
+            (event) => {
                 const type = event.getType();
                 let events = eventsByType.get(type);
-
                 if (!events) {
                     events = [];
                     eventsByType.set(type, events);
@@ -110,6 +117,6 @@ export class EventService implements IEventService {
             }
         );
 
-        return eventsByType;
+        return Promise.resolve(eventsByType);
     }
 }
